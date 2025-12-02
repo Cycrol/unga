@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flexbox Layout Re-creation</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;background:#fff;display:flex;align-items:flex-start;justify-content:center;padding:24px}
+    .frame{
+      width:640px;
+      height:640px;
+      border:4px solid #c62828;
+      display:flex;
+      flex-direction:column;
+      background:transparent;
+      box-shadow: 0 0 0 2px rgba(198,40,40,0.06) inset;
+    }
+    .top{
+      height:56px;
+      display:flex;
+      align-items:stretch;
+      border-bottom:3px solid #c62828;
+    }
+    .top-left{display:flex;align-items:center;padding-left:6px;gap:6px}
+    .mini{width:64px;height:40px;background:#f08282;border:2px solid rgba(198,40,40,0.9);position:relative}
+    .mini + .mini{ margin-left:6px }
+    .mini::after{content:'';position:absolute;right:-6px;top:6px;bottom:6px;width:4px;background:#d7c7e6}
+    .top-right{flex:1;background:#bfe6f0;border-left:2px solid rgba(198,40,40,0.2)}
+    .middle{flex:1;display:flex;padding:10px}
+    .sidebar{width:96px;background:#6f7986;margin-right:10px;border-right:2px solid #c62828}
+    .main{flex:1;background:#fffde5;border:2px solid rgba(198,40,40,0.15);}
+    .bottom{height:64px;display:flex;align-items:center;border-top:3px solid #c62828}
+    .bottom-left{display:flex;gap:6px;padding-left:6px}
+    .mini-small{width:48px;height:40px;background:#f08282;border:2px solid rgba(198,40,40,0.9);position:relative}
+    .mini-small::after{content:'';position:absolute;right:-6px;top:8px;bottom:8px;width:4px;background:#d7c7e6}
+    .bottom-right{flex:1;background:#bfe6f0;margin-left:10px}
+    @media (max-width:680px){
+      .frame{width:92vw;height:92vw}
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="top">
+      <div class="top-left">
+        <div class="mini"></div>
+        <div class="mini"></div>
+        <div class="mini" style="border-right:none"></div>
+      </div>
+      <div class="top-right"></div>
+    </div>
+
+    <div class="middle">
+      <div class="sidebar"></div>
+      <div class="main"></div>
+    </div>
+
+    <div class="bottom">
+      <div class="bottom-left">
+        <div class="mini-small"></div>
+        <div class="mini-small"></div>
+        <div class="mini-small" style="border-right:none"></div>
+      </div>
+      <div class="bottom-right"></div>
+    </div>
+  </div>
+</body>
+</html>
