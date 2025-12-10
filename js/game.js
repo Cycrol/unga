@@ -113,6 +113,18 @@ function handleInput(dt) {
     player.noJump();
   }
 
+  if (input.isDown('FIRE')) {
+    player.shoot();
+  } else {
+    player.noShoot();
+  }
+
+  if (input.isDown('INVINCIBILITY')) {
+    player.toggleInvincibility();
+  } else {
+    player.noToggleInvincibility();
+  }
+
   if (input.isDown('DOWN')) {
     player.crouch();
   } else {
@@ -145,6 +157,7 @@ function updateEntities(dt, gameTime) {
   }
 
   if (player.powering.length !== 0 || player.dying) { return; }
+  
   level.items.forEach (function(ent) {
     ent.update(dt);
   });
@@ -156,6 +169,7 @@ function updateEntities(dt, gameTime) {
   fireballs.forEach(function(fireball) {
     fireball.update(dt);
   });
+  
   level.pipes.forEach (function(pipe) {
     pipe.update(dt);
   });
@@ -211,7 +225,7 @@ function render() {
   fireballs.forEach(function(fireball) {
     renderEntity(fireball);
   })
-
+  
   //then we draw every static object.
   for(var i = 0; i < 15; i++) {
     for (var j = Math.floor(vX / 16) - 1; j < Math.floor(vX / 16) + 20; j++){

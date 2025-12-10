@@ -5,6 +5,9 @@
   var Koopa = Mario.Koopa = function(pos, sprite, para) {
     this.dying = false;
     this.shell = false;
+    this.dashing = false;
+    this.dashTimer = Math.random() * 4 + 3; // Random delay 3-7 seconds
+    this.dashDuration = 0;
 
     this.para = para; //para. As in, is it a paratroopa?
 
@@ -17,6 +20,7 @@
       hitbox: [2,8,12,24]
     });
     this.vel[0] = -0.5;
+    this.normalSpeed = -0.5;
     this.idx = level.enemies.length;
   };
 
@@ -78,8 +82,64 @@
         this.sprite.setFrame(0);
       }
     }
-    this.acc[1] = 0.2;
+    
+    // Dash attack logic (only when not in shell)
+    if (!this.shell && !this.dying) {
+      if (this.dashing) {
+        this.dashDuration -= dt;
+        if (this.dashDuration <= 0) {
+          // End dash
+          this.dashing = false;
+          this.vel[0] = this.normalSpeed;
+          this.sprite.speed = 2;
+        }
+      } else {
+        this.dashTimer -= dt;
+        if (this.dashTimer <= 0 && Math.abs(this.pos[0] - player.pos[0]) < 150) {
+          // Start dash
+          this.dashing = true;
+          this.dashDuration = 1.5; // Dash for 1.5 seconds
+          this.dashTimer = Math.random() * 4 + 3; // Reset timer: 3-7 seconds
+          var direction = this.pos[0] > player.pos[0] ? -1 : 1;
+          this.vel[0] = direction * 3; // 6x faster
+          this.normalSpeed = this.vel[0] / 6;
+          this.sprite.speed = 10; // Faster animation during dash
+        }
+      }
+    }
+    
+    // Flying behavior for paratroopas
+    if (this.para && !this.shell && !this.dying) {
+      // Bounce up and down
+      if (!this.flyTimer) {
+        this.flyTimer = 0;
+        this.baseY = this.pos[1];
+      }
+      this.flyTimer += dt * 3;
+      this.vel[1] = Math.sin(this.flyTimer) * 2;
+      this.acc[1] = 0; // No gravity for flying koopas
+      
+      // Shooting logic for flying koopas
+      if (!this.shootTimer) {
+        this.shootTimer = Math.random() * 3 + 2; // 2-5 seconds
+        this.burstCount = 0;
+      }
+      this.shootTimer -= dt;
+      if (this.shootTimer <= 0 && Math.abs(this.pos[0] - player.pos[0]) < 200) {
+        this.shoot();
+        this.burstCount++;
+        if (this.burstCount >= 3) {
+          this.shootTimer = Math.random() * 3 + 2;
+          this.burstCount = 0;
+        } else {
+          this.shootTimer = 0.2; // 0.2 seconds between shots in burst
+        }
+      }
+    } else {
+      this.acc[1] = 0.2;
+    }
     this.vel[1] += this.acc[1];
+    
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
     this.sprite.update(dt);
@@ -182,6 +242,7 @@
     if (this.para) {
       this.para = false;
       this.sprite.pos[0] -= 32;
+      this.acc[1] = 0.2; // Restore gravity when stomped
     } else {
       sounds.stomp.play();
       this.shell = 360;
@@ -201,11 +262,22 @@
     sounds.kick.play();
     if (this.flipping) return;
     this.flipping = true;
+    this.para = false; // Remove flying status
     this.sprite.pos = [160, 0];
     this.sprite.size = [16,16];
     this.hitbox = [2, 0, 12, 16];
     this.sprite.speed = 0;
     this.vel[0] = 0;
     this.vel[1] = -2.5;
+    this.acc[1] = 0.2; // Ensure gravity applies
+  };
+
+  Koopa.prototype.shoot = function() {
+    var direction = this.pos[0] > player.pos[0] ? -1 : 1;
+    var fireball = new Mario.Fireball([this.pos[0] + 8, this.pos[1] + 8], 'enemy');
+    fireball.vel[0] = direction * 2;
+    fireball.vel[1] = -1;
+    fireball.acc[1] = 0.2;
+    fireballs.push(fireball);
   };
 })();

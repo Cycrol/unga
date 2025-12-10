@@ -5,7 +5,7 @@ var oneone = Mario.oneone = function() {
   level = new Mario.Level({
     playerPos: [56,192],
     loader: Mario.oneone,
-    background: "#7974FF",
+    background: "#880808",
     scrolling: true,
     invincibility: [144, 192, 240],
     exit: 204,
@@ -57,6 +57,9 @@ var oneone = Mario.oneone = function() {
    },
    koopaSprite: function() {
      return new Mario.Sprite('sprites/enemy.png', [96,0], [16,32], 2, [0,1]);
+   },
+   paraKoopaSprite: function() {
+     return new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]);
    },
    flagPoleSprites: [
      new Mario.Sprite('sprites/tiles.png', [256, 128], [16,16], 0),
@@ -195,6 +198,7 @@ var oneone = Mario.oneone = function() {
   level.putFlagpole(198);
 
   //and enemies
+  level.putKoopa(10, 12); // Koopa on first screen
   level.putGoomba(22, 12);
   level.putGoomba(40, 12);
   level.putGoomba(50, 12);
@@ -212,6 +216,18 @@ var oneone = Mario.oneone = function() {
   level.putGoomba(170, 12);
   level.putGoomba(172, 12);
   level.putKoopa(35, 11);
+  
+  // 10 Flying Koopas (Paratroopas) throughout level
+  level.enemies.push(new Mario.Koopa([16*15, 16*8], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*30, 16*6], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*55, 16*7], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*70, 16*5], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*90, 16*8], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*110, 16*6], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*130, 16*7], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*150, 16*5], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*165, 16*8], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
+  level.enemies.push(new Mario.Koopa([16*185, 16*6], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
 
   music.underground.pause();
   // music.overworld.currentTime = 0;

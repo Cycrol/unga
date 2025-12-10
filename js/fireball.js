@@ -2,9 +2,10 @@
   if (typeof Mario === 'undefined')
     window.Mario = {};
 
-  var Fireball = Mario.Fireball = function(pos) {
+  var Fireball = Mario.Fireball = function(pos, owner) {
     this.hit = 0;
     this.standing = false;
+    this.owner = owner || 'player'; // 'player' or 'enemy'
 
     Mario.Entity.call(this, {
       pos: pos,
@@ -102,10 +103,16 @@
     level.enemies.forEach(function(enemy){
       if (enemy.flipping || enemy.pos[0] - vX > 336){ //stop checking once we get to far away dudes.
         return;
-      } else {
+      } else if (that.owner === 'player') {
+        // Player fireballs hit enemies
         that.isCollideWith(enemy);
       }
     });
+    
+    // Enemy fireballs hit player
+    if (this.owner === 'enemy') {
+      this.isCollideWith(player);
+    }
   }
 
   Fireball.prototype.isCollideWith = function(ent) {
@@ -117,7 +124,15 @@
     if (!(hpos1[0] > hpos2[0]+ent.hitbox[2] || (hpos1[0]+this.hitbox[2] < hpos2[0]))) {
       if (!(hpos1[1] > hpos2[1]+ent.hitbox[3] || (hpos1[1]+this.hitbox[3] < hpos2[1]))) {
         this.hit = 1;
-        ent.bump();
+        if (ent instanceof Mario.Player) {
+          // Enemy fireball hits player
+          if (!ent.invincibility) {
+            ent.damage();
+          }
+        } else {
+          // Player fireball hits enemy
+          ent.bump();
+        }
       }
     }
   };

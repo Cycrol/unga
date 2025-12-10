@@ -11,9 +11,14 @@
 		this.bounce = false;
 		this.jumping = 0;
 		this.canJump = true;
+		this.jumpsRemaining = 2;
+		this.jumpButtonReleased = true;
 		this.invincibility = 0;
 		this.crouching = false;
 		this.fireballs = 0;
+		this.fireButtonReleased = true;
+		this.invincibilityToggle = false;
+		this.invincibilityButtonReleased = true;
 		this.runheld = false;
 		this.noInput = false;
 		this.targetPos = [];
@@ -36,11 +41,31 @@
 	}
 
 	Player.prototype.shoot = function() {
-		if (this.fireballs >= 2) return; //Projectile limit!
+		if (!this.fireButtonReleased) return;
+		this.fireButtonReleased = false;
 		this.fireballs += 1;
 		var fb = new Mario.Fireball([this.pos[0]+8,this.pos[1]]); //I hate you, Javascript.
 		fb.spawn(this.left);
 		this.shooting = 2;
+	}
+
+	Player.prototype.noShoot = function() {
+		this.fireButtonReleased = true;
+	}
+
+	Player.prototype.toggleInvincibility = function() {
+		if (!this.invincibilityButtonReleased) return;
+		this.invincibilityButtonReleased = false;
+		this.invincibilityToggle = !this.invincibilityToggle;
+		if (this.invincibilityToggle) {
+			this.invincibility = 999999; // Effectively infinite
+		} else {
+			this.invincibility = 0;
+		}
+	}
+
+	Player.prototype.noToggleInvincibility = function() {
+		this.invincibilityButtonReleased = true;
 	}
 
 	Player.prototype.noRun = function() {
@@ -104,12 +129,28 @@
 		if (this.vel[1] > 0) {
 			return;
 		}
+		
 		if (this.jumping) {
 			this.jumping -= 1;
 		} else if (this.standing && this.canJump) {
+			// Ground jump
 			this.jumping = 20;
 			this.canJump = false;
 			this.standing = false;
+			this.jumpsRemaining = 1;
+			this.vel[1] = -6;
+			if (this.power === 0) {
+				sounds.smallJump.currentTime = 0;
+				sounds.smallJump.play();
+			} else {
+				sounds.bigJump.currentTime = 0;
+				sounds.bigJump.play();
+			}
+		} else if (!this.standing && this.jumpButtonReleased && this.jumpsRemaining > 0) {
+			// Air jump (double jump)
+			this.jumping = 20;
+			this.jumpButtonReleased = false;
+			this.jumpsRemaining = 0;
 			this.vel[1] = -6;
 			if (this.power === 0) {
 				sounds.smallJump.currentTime = 0;
@@ -123,6 +164,7 @@
 
 	Player.prototype.noJump = function() {
 		this.canJump = true;
+		this.jumpButtonReleased = true;
 		if (this.jumping) {
 			if (this.jumping <= 16) {
 				this.vel[1] = 0;
@@ -389,6 +431,10 @@
 		this.power = 0;
 		this.waiting = 0.5;
 		this.dying = 2;
+		
+		// Clear all fireballs on death
+		fireballs.length = 0;
+		this.fireballs = 0;
 
 		if (this.pos[1] < 240) { //falling into a pit doesn't do the animation.
 			this.targetPos = [this.pos[0], this.pos[1]-128];

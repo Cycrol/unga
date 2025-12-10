@@ -6,6 +6,7 @@
 
   var Goomba = Mario.Goomba = function(pos, sprite) {
     this.dying = false;
+    this.shootTimer = Math.random() * 3 -1; // Random delay 2-5 seconds
     Mario.Entity.call(this, {
       pos: pos,
       sprite: sprite,
@@ -36,6 +37,14 @@
     this.vel[1] += this.acc[1];
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
+    
+    // Shooting logic
+    this.shootTimer -= dt;
+    if (this.shootTimer <= 0 && Math.abs(this.pos[0] - player.pos[0]) < 200) {
+      this.shoot();
+      this.shootTimer = Math.random() * 3 + 2; // Reset timer: 2-5 seconds
+    }
+    
     this.sprite.update(dt);
   };
 
@@ -116,6 +125,12 @@
     this.sprite.speed = 0;
     this.vel[0] = 0;
     this.dying = 10;
+  };
+
+  Goomba.prototype.shoot = function() {
+    var direction = this.pos[0] > player.pos[0]; // true = shoot left, false = shoot right
+    var fb = new Mario.Fireball([this.pos[0] + 8, this.pos[1]], 'enemy');
+    fb.spawn(direction);
   };
 
   Goomba.prototype.bump = function() {

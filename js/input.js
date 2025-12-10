@@ -20,6 +20,10 @@
             key = 'JUMP'; break;
         case 90:
             key = 'RUN'; break;
+        case 70:
+            key = 'FIRE'; break;
+        case 71:
+            key = 'INVINCIBILITY'; break;
         default:
             key = String.fromCharCode(code);
         }

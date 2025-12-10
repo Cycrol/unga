@@ -97,6 +97,9 @@
         if (Math.abs(hpos2[1] + ent.hitbox[3] - hpos1[1]) <= ent.vel[1]) {
           ent.vel[1] = 0;
           ent.pos[1] = hpos1[1] - ent.hitbox[3] - ent.hitbox[1];
+          if (!ent.standing && ent instanceof Mario.Player) {
+            ent.jumpsRemaining = 2;
+          }
           ent.standing = true;
           if (ent instanceof Mario.Player) {
             ent.jumping = 0;
