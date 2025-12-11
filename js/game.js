@@ -42,23 +42,23 @@ resources.load([
   'sprites/enemyr.png',
 ]);
 
-resources.onReady(init);
 var level;
 var sounds;
 var music;
+var gameStarted = false;
 
 //initialize
 var lastTime;
 function init() {
   music = {
-    overworld: new Audio('sounds//new_sounds/Shadow_Steps.wav'),
+    overworld: new Audio('sounds/new_sounds/Shadow_Steps.wav'),
     underground: new Audio('sounds/underground_bgm.ogg'),
     clear: new Audio('sounds/stage_clear.wav'),
     death: new Audio('sounds/new_sounds/death.wav')
   };
   sounds = {
-    smallJump: new Audio('sounds//new_sounds/jump.wav'),
-    bigJump: new Audio('sounds//new_sounds/jump.wav'),
+    smallJump: new Audio('sounds/new_sounds/jump.wav'),
+    bigJump: new Audio('sounds/new_sounds/jump.wav'),
     breakBlock: new Audio('sounds/breakblock.wav'),
     bump: new Audio('sounds/bump.wav'),
     coin: new Audio('sounds/coin.wav'),
@@ -70,10 +70,26 @@ function init() {
     powerup: new Audio('sounds/powerup.wav'),
     stomp: new Audio('sounds/stomp.wav')
   };
+  
+  // Enable audio on any key press or click
+  function startGame() {
+    if (!gameStarted) {
+      gameStarted = true;
+      music.overworld.play().catch(function(e) { console.log("Audio play failed:", e); });
+      document.removeEventListener('keydown', startGame);
+      document.removeEventListener('click', startGame);
+    }
+  }
+  
+  document.addEventListener('keydown', startGame);
+  document.addEventListener('click', startGame);
+  
   Mario.oneone();
   lastTime = Date.now();
   main();
 }
+
+resources.onReady(init);
 
 var gameTime = 0;
 
