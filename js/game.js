@@ -51,18 +51,18 @@ var music;
 var lastTime;
 function init() {
   music = {
-    overworld: new Audio('sounds/aboveground_bgm.ogg'),
+    overworld: new Audio('sounds//new_sounds/Shadow_Steps.wav'),
     underground: new Audio('sounds/underground_bgm.ogg'),
     clear: new Audio('sounds/stage_clear.wav'),
-    death: new Audio('sounds/mariodie.wav')
+    death: new Audio('sounds/new_sounds/death.wav')
   };
   sounds = {
-    smallJump: new Audio('sounds/jump-small.wav'),
-    bigJump: new Audio('sounds/jump-super.wav'),
+    smallJump: new Audio('sounds//new_sounds/jump.wav'),
+    bigJump: new Audio('sounds//new_sounds/jump.wav'),
     breakBlock: new Audio('sounds/breakblock.wav'),
     bump: new Audio('sounds/bump.wav'),
     coin: new Audio('sounds/coin.wav'),
-    fireball: new Audio('sounds/fireball.wav'),
+    fireball: new Audio('sounds/new_sounds/laser.wav'),
     flagpole: new Audio('sounds/flagpole.wav'),
     kick: new Audio('sounds/kick.wav'),
     pipe: new Audio('sounds/pipe.wav'),
