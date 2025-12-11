@@ -36,7 +36,12 @@
     } else if (this.standing){
       this.standing = false;
       if (this.item) {
-        this.item.spawn();
+        // Shoot a deadly fireball at player instead of spawning item
+        var fireballPos = [this.pos[0], this.pos[1] - 16];
+        var direction = player.pos[0] > this.pos[0] ? 1 : -1;
+        var fireball = new Mario.Fireball(fireballPos, 'enemy');
+        fireball.vel = [direction * 3, 0];
+        fireballs.push(fireball);
         this.item = null;
       }
       this.opos = [];

@@ -52,7 +52,7 @@ var lastTime;
 function init() {
   music = {
     overworld: new Audio('sounds/new_sounds/Shadow_Steps.wav'),
-    underground: new Audio('sounds/underground_bgm.ogg'),
+    underground: new Audio('sounds/new_sounds/boss_music.mp3'),
     clear: new Audio('sounds/stage_clear.wav'),
     death: new Audio('sounds/new_sounds/death.wav')
   };
@@ -168,8 +168,16 @@ function updateEntities(dt, gameTime) {
   if (player.exiting) {
     if (player.pos[0] > vX + 96)
       vX = player.pos[0] - 96
-  }else if (level.scrolling && player.pos[0] > vX + 80) {
-    vX = player.pos[0] - 80;
+  }else if (level.scrolling) {
+    // Scroll right when moving right
+    if (player.pos[0] > vX + 80) {
+      vX = player.pos[0] - 80;
+    }
+    // Scroll left when moving left (for backwards levels)
+    else if (player.pos[0] < vX + 80 && vX > 0) {
+      vX = player.pos[0] - 80;
+      if (vX < 0) vX = 0;
+    }
   }
 
   if (player.powering.length !== 0 || player.dying) { return; }

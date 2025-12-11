@@ -1,7 +1,7 @@
 var oneonetunnel = Mario.oneonetunnel = function() {
   level = new Mario.Level({
     playerPos: [40,16],
-    loader: Mario.oneonetunnel,
+    loader: Mario.oneone,
     background: "#000000",
     scrolling: false,
     coinSprite: function() {
@@ -35,29 +35,65 @@ var oneonetunnel = Mario.oneonetunnel = function() {
   player.pos[0] = level.playerPos[0];
   player.pos[1] = level.playerPos[1];
   vX = 0;
-  level.putFloor(0,16);
+  
+  // Floor with death pit in middle (blocks 7-8 removed)
+  level.putFloor(0, 7);
+  level.putFloor(9, 16);
+  // Gap at blocks 7-8 for death pit
+  
+  // Ceiling to prevent going off top
+  for (var i = 1; i < 15; i++) {
+    level.statics[0][i] = new Mario.Floor([16*i, 0], level.wallSprite);
+    level.statics[1][i] = new Mario.Floor([16*i, 16], level.wallSprite);
+  }
+  
+  // Side walls
   level.putWall(0,13,11);
-  walls = [4,5,6,7,8,9,10];
-  walls.forEach(function(loc){
-    level.putWall(loc,13,3);
-    level.putWall(loc,3,1);
-  });
+  level.putWall(15,13,11);
+  
+  // Grid platform layout - 3 levels of platforms for vertical movement
+  // Bottom level platforms (y=10)
+  level.statics[10][2] = new Mario.Floor([16*2, 16*10], level.floorSprite);
+  level.statics[10][3] = new Mario.Floor([16*3, 16*10], level.floorSprite);
+  level.statics[10][6] = new Mario.Floor([16*6, 16*10], level.floorSprite);
+  level.statics[10][7] = new Mario.Floor([16*7, 16*10], level.floorSprite);
+  level.statics[10][10] = new Mario.Floor([16*10, 16*10], level.floorSprite);
+  level.statics[10][11] = new Mario.Floor([16*11, 16*10], level.floorSprite);
+  
+  // Middle level platforms (y=7)
+  level.statics[7][3] = new Mario.Floor([16*3, 16*7], level.floorSprite);
+  level.statics[7][4] = new Mario.Floor([16*4, 16*7], level.floorSprite);
+  level.statics[7][7] = new Mario.Floor([16*7, 16*7], level.floorSprite);
+  level.statics[7][8] = new Mario.Floor([16*8, 16*7], level.floorSprite);
+  level.statics[7][11] = new Mario.Floor([16*11, 16*7], level.floorSprite);
+  level.statics[7][12] = new Mario.Floor([16*12, 16*7], level.floorSprite);
+  
+  // Top level platforms (y=4)
+  level.statics[4][2] = new Mario.Floor([16*2, 16*4], level.floorSprite);
+  level.statics[4][3] = new Mario.Floor([16*3, 16*4], level.floorSprite);
+  level.statics[4][6] = new Mario.Floor([16*6, 16*4], level.floorSprite);
+  level.statics[4][7] = new Mario.Floor([16*7, 16*4], level.floorSprite);
+  level.statics[4][10] = new Mario.Floor([16*10, 16*4], level.floorSprite);
+  level.statics[4][11] = new Mario.Floor([16*11, 16*4], level.floorSprite);
 
-  coins = [[5,5], [6,5], [7,5], [8,5], [9,5],
-           [4,7], [5,7], [6,7], [7,7], [8,7], [9,7], [10,7],
-           [4,9], [5,9], [6,9], [7,9], [8,9], [9,9], [10,9]];
-  coins.forEach(function(pos){
-    level.putCoin(pos[0],pos[1]);
-  });
+  // Hidden miniboss - Bowser boss in top right
+  var bossEnemy = new Mario.Boss([16*14, 16*2], new Mario.Sprite('sprites/enemy.png', [656, 0], [32,32], 0, [0]));
+  level.enemies.push(bossEnemy);
+  level.bossEnemy = bossEnemy; // Store reference for exit pipe check
 
-  //level.putLeftPipe(13,11);
+  // Exit pipe - blocked until boss is defeated
   level.putRealPipe(13,11,3,"RIGHT", function() {
+    // Check if boss is still alive
+    if (level.bossEnemy && level.enemies.indexOf(level.bossEnemy) !== -1) {
+      // Boss still alive - play error sound and don't allow exit
+      if (sounds.bump) sounds.bump.play();
+      return;
+    }
+    // Boss defeated - allow exit
     Mario.oneone.call();
     player.pos = [2616, 177]
     player.pipe("UP", function() {;});
   });
-
-  level.putPipe(15,13,13);
 
   music.overworld.pause();
   music.underground.currentTime = 0;

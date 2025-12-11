@@ -76,7 +76,9 @@
   Level.prototype.putWall = function(x, y, height) {
     //y is the bottom of the wall in this case.
     for (var i = y-height; i < y; i++) {
-      this.statics[i][x] = new Mario.Floor([16*x, 16*i], this.wallSprite);
+      if (i >= 0 && i < this.statics.length) {
+        this.statics[i][x] = new Mario.Floor([16*x, 16*i], this.wallSprite);
+      }
     }
   };
 
