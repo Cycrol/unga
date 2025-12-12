@@ -324,12 +324,22 @@
 				this.vel = [0,0];
 				window.setTimeout(function() {
 					var powerState = player.power;
+					// Use flagCompleteLoader if it exists, otherwise use regular loader
+					var loaderFunc = level.flagCompleteLoader || level.loader;
+					
+					// If redirecting to another page, just do it
+					if (level.flagCompleteLoader) {
+						loaderFunc();
+						return;
+					}
+					
+					// Otherwise, normal level transition
 					player.sprite.size = powerState===0 ? [16,16] : [16,32];
 					player.exiting = false;
 					player.noInput = false;
 					player.vel = [0,0];
 					player.acc = [0,0];
-					level.loader();
+					loaderFunc();
 					// Reset player position after level loads
 					player.pos[0] = level.playerPos[0];
 					player.pos[1] = level.playerPos[1];

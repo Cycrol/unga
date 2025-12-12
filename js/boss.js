@@ -5,7 +5,7 @@
   var Boss = Mario.Boss = function(pos, sprite) {
     this.dying = false;
     this.health = 20;
-    this.maxHealth = 20;
+    this.maxHealth = 40;
     this.shootTimer = 5; // 5 second delay before first shot
     Mario.Entity.call(this, {
       pos: pos,
@@ -65,11 +65,11 @@
   Boss.prototype.updateSprite = function() {
     // Cycle through 4 Bowser costumes based on health (20 total)
     // Health 20-16: sprite at 656, 15-11: 688, 10-6: 720, 5-1: 752
-    if (this.health >= 16) {
+    if (this.health >= 30) {
       this.sprite.pos = [656, 0];
-    } else if (this.health >= 11) {
+    } else if (this.health >= 20) {
       this.sprite.pos = [688, 0];
-    } else if (this.health >= 6) {
+    } else if (this.health >= 10) {
       this.sprite.pos = [720, 0];
     } else {
       this.sprite.pos = [752, 0];

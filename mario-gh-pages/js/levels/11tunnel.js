@@ -52,9 +52,8 @@ var oneonetunnel = Mario.oneonetunnel = function() {
 
   //level.putLeftPipe(13,11);
   level.putRealPipe(13,11,3,"RIGHT", function() {
-    Mario.oneone.call();
-    player.pos = [2616, 177]
-    player.pipe("UP", function() {;});
+    console.log("Exiting hidden level - redirecting to outer game!");
+    window.location.href = '../index.html';
   });
 
   level.putPipe(15,13,13);

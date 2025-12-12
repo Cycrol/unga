@@ -3,6 +3,7 @@
     this.playerPos = options.playerPos;
     this.scrolling = options.scrolling;
     this.loader = options.loader;
+    this.flagCompleteLoader = options.flagCompleteLoader;
     this.background = options.background;
     this.exit = options.exit;
 

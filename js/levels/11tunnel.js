@@ -89,10 +89,9 @@ var oneonetunnel = Mario.oneonetunnel = function() {
       if (sounds.bump) sounds.bump.play();
       return;
     }
-    // Boss defeated - allow exit
-    Mario.oneone.call();
-    player.pos = [2616, 177]
-    player.pipe("UP", function() {;});
+    // Boss defeated - redirect to original game
+    console.log("Boss defeated! Redirecting to original game!");
+    window.location.href = './mario-gh-pages/index.html';
   });
 
   music.overworld.pause();
