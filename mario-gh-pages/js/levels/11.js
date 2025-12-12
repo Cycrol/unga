@@ -4,8 +4,8 @@ var oneone = Mario.oneone = function() {
   //TODO: put as much of this in the Level object definition as possible.
   level = new Mario.Level({
     playerPos: [56,192],
-    loader: Mario.onetwo,
-    background: "#880808",
+    loader: Mario.oneone,
+    background: "#7974FF",
     scrolling: true,
     invincibility: [144, 192, 240],
     exit: 204,
@@ -58,16 +58,13 @@ var oneone = Mario.oneone = function() {
    koopaSprite: function() {
      return new Mario.Sprite('sprites/enemy.png', [96,0], [16,32], 2, [0,1]);
    },
-   paraKoopaSprite: function() {
-     return new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]);
-   },
    flagPoleSprites: [
      new Mario.Sprite('sprites/tiles.png', [256, 128], [16,16], 0),
      new Mario.Sprite('sprites/tiles.png', [256, 144], [16,16], 0),
      new Mario.Sprite('sprites/items.png', [128, 32], [16,16], 0)
    ]
  });
-  ground = [[2,12],[14, 27], [32, 69], [71,86],[89,110],[115, 152],[155,212]];
+  ground = [[0,69],[71,86],[89,153],[155,212]];
   player.pos[0] = level.playerPos[0];
   player.pos[1] = level.playerPos[1];
   vX = 0;
@@ -163,38 +160,19 @@ var oneone = Mario.oneone = function() {
   level.putQBlock(130, 5, new Mario.Bcoin([2080, 80]));
   level.putBrick(130, 9, null);
   level.putBrick(131, 5, null);
-
-  level.putBrick(5, 4, null);
-  level.putBrick(5, 5, null);
-  level.putBrick(5, 6, null);
-  level.putBrick(5, 7, null);
-  level.putBrick(5, 8, null);
-  level.putBrick(5, 9, null);
-  level.putBrick(5, 10, null);
-  level.putBrick(5, 11, null);
-  level.putBrick(5, 12, null);
-  level.putBrick(5, 13, null);
-  level.putBrick(5, 14, null);
- 
-
-
-
+  level.putWall(134, 13, 1);
   level.putWall(135, 13, 2);
   level.putWall(136, 13, 3);
   level.putWall(137, 13, 4);
-  level.putWall(138, 13, 4);
-  level.putWall(139, 13, 4);
   level.putWall(140, 13, 4);
   level.putWall(141, 13, 3);
   level.putWall(142, 13, 2);
-
+  level.putWall(143, 13, 1);
   level.putWall(148, 13, 1);
   level.putWall(149, 13, 2);
   level.putWall(150, 13, 3);
   level.putWall(151, 13, 4);
   level.putWall(152, 13, 4);
-  level.putWall(153, 13, 4);
-  level.putWall(154, 13, 4);
   level.putWall(155, 13, 4);
   level.putWall(156, 13, 3);
   level.putWall(157, 13, 2);
@@ -213,18 +191,14 @@ var oneone = Mario.oneone = function() {
   level.putWall(186, 13, 6);
   level.putWall(187, 13, 7);
   level.putWall(188, 13, 8);
-  level.putWall(189, 13, 9);
-  level.putWall(190, 13, 10);
-  level.putWall(191, 13, 11);
-  level.putWall(192, 13, 12);
-  level.putWall(193, 13, 13);
+  level.putWall(189, 13, 8);
   level.putFlagpole(198);
 
   //and enemies
-  level.putKoopa(10, 12); // Koopa on first screen
   level.putGoomba(22, 12);
   level.putGoomba(40, 12);
-  // Removed Goombas at 50, 51 near tunnel exit pipe at 57
+  level.putGoomba(50, 12);
+  level.putGoomba(51, 12);
   level.putGoomba(82, 4);
   level.putGoomba(84, 4);
   level.putGoomba(100, 12);
@@ -238,22 +212,8 @@ var oneone = Mario.oneone = function() {
   level.putGoomba(170, 12);
   level.putGoomba(172, 12);
   level.putKoopa(35, 11);
-  
-  // 8 Flying Koopas (Paratroopas) throughout level (removed ones near tunnel exit at 163)
-  level.enemies.push(new Mario.Koopa([16*15, 16*8], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
-  level.enemies.push(new Mario.Koopa([16*30, 16*6], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
-  // Removed flying Koopa at position 55 (too close to tunnel entrance at 57)
-  level.enemies.push(new Mario.Koopa([16*70, 16*5], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
-  level.enemies.push(new Mario.Koopa([16*90, 16*8], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
-  level.enemies.push(new Mario.Koopa([16*110, 16*6], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
-  level.enemies.push(new Mario.Koopa([16*130, 16*7], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
-  level.enemies.push(new Mario.Koopa([16*150, 16*5], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
-  // Removed flying Koopa at position 165 (right at tunnel exit at 163)
-  level.enemies.push(new Mario.Koopa([16*185, 16*6], new Mario.Sprite('sprites/enemy.png', [128,0], [16,32], 2, [0,1]), true));
 
   music.underground.pause();
   // music.overworld.currentTime = 0;
-  if (gameStarted) {
-    music.overworld.play();
-  }
+  music.overworld.play();
 };

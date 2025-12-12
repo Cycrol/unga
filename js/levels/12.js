@@ -1,10 +1,15 @@
+// Loader function that redirects to original game
+var redirectToOriginalGame = function() {
+  window.location.href = 'mario-gh-pages/index.html';
+};
+
 var onetwo = Mario.onetwo = function() {
   //The things that need to be passed in are basically just dependent on what
   //tileset we're in, so it makes more sense to just make one variable for that, so
   //TODO: put as much of this in the Level object definition as possible.
   level = new Mario.Level({
     playerPos: [56,192],
-    loader: Mario.oneone,
+    loader: redirectToOriginalGame,
     background: "#301637",
     scrolling: true,
     invincibility: [144, 192, 240],
@@ -179,24 +184,7 @@ var onetwo = Mario.onetwo = function() {
 
 
 
-  level.putWall(134, 13, 1);
-  level.putWall(135, 13, 2);
-  level.putWall(136, 13, 3);
-  level.putWall(137, 13, 4);
-  level.putWall(140, 13, 4);
-  level.putWall(141, 13, 3);
-  level.putWall(142, 13, 2);
-  level.putWall(143, 13, 1);
-  level.putWall(148, 13, 1);
-  level.putWall(149, 13, 2);
-  level.putWall(150, 13, 3);
-  level.putWall(151, 13, 4);
-  level.putWall(152, 13, 4);
-  level.putWall(155, 13, 4);
-  level.putWall(156, 13, 3);
-  level.putWall(157, 13, 2);
-  level.putWall(158, 13, 1);
-  level.putPipe(163, 13, 2);
+  
   level.putBrick(168, 9, null);
   level.putBrick(169, 9, null);
   level.putQBlock(170, 9, new Mario.Bcoin([2720, 144]));
@@ -210,7 +198,11 @@ var onetwo = Mario.onetwo = function() {
   level.putWall(186, 13, 6);
   level.putWall(187, 13, 7);
   level.putWall(188, 13, 8);
-  level.putWall(189, 13, 8);
+  level.putWall(189, 13, 9);
+  level.putWall(190, 13, 10);
+  level.putWall(191, 13, 11);
+  level.putWall(192, 13, 12);
+  level.putWall(193, 13, 13);
   level.putFlagpole(198);
 
   //and enemies
